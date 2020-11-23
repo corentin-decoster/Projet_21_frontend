@@ -24,9 +24,17 @@ var game = new Phaser.Game(config);
 function preload ()
 {
     this.load.image('tempBackground', 'assets/tempBackground.jpg');
+    this.load.image('tempPerso', 'assets/testPerso.jpg');
+    
 }
 
 function create ()
 {
     this.add.image(config.width / 2, config.height / 2, 'tempBackground');
+    let tempPerso = this.add.image(config.width / 2, config.height / 2, 'tempPerso');
+    tempPerso.setScale(0.5,0.5);
+}
+
+function update(){
+    
 }
