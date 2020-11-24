@@ -43,7 +43,6 @@ function create ()
     player = this.physics.add.sprite(config.width / 2, config.height / 2, 'tempPerso');
 
     player.setScale(2,2);
-    player.setBounce(0.2);
     player.setCollideWorldBounds(true);
 
     cursors = this.input.keyboard.createCursorKeys();
