@@ -1,4 +1,5 @@
-
+import Bullet from "./bullet.js";
+import BulletGroup from "./bulletGroup.js";
 var myCustomCanvas = document.createElement('canvas');
 
 myCustomCanvas.id = 'myCustomCanvas';
@@ -31,11 +32,13 @@ var game = new Phaser.Game(config);
 var player;
 var cursors;
 var faceRight;
+var bulletGroup = new BulletGroup(config);
 
 function preload ()
 {
     this.load.image('tempBackground', 'assets/tempBackground.jpg');
-    this.load.spritesheet('tempPerso', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line.png', { frameWidth: 48, frameHeight: 48 }); 
+    this.load.spritesheet('tempPerso', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line.png', { frameWidth: 48, frameHeight: 48 });
+    this.load.image('bullet','assets/TeamGunner/EXTRAS/bullet.png');
 }
 
 function create ()
@@ -87,8 +90,21 @@ function create ()
     console.log(this);
 }
 
-function update()
-{
+function update(){
+    //W pour tirer
+    if(cursors.space.isDown){
+        shoot(this.player.x,this.player.y);
+    }
+
+
+    //deplacement :)
+   deplacement();
+}
+
+
+
+
+function deplacement(){
     if(cursors.right.isDown){
         faceRight = true;
         player.setVelocityX(160);
