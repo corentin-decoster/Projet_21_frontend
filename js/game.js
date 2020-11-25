@@ -6,6 +6,7 @@ class GameScene extends Phaser.Scene {
         this.cursors;
         this.faceRight;
         this.bulletGroup;
+        this.bulletDelay;
     }
 
     preload() {
@@ -22,6 +23,9 @@ class GameScene extends Phaser.Scene {
         //Creating a bulletGroup which will be the ammunitions available for the character to shoot
         this.bulletGroup = new BulletGroup(this);
 
+        //Adding a delay on the fire rate
+        this.createDelay();
+
         //Adding cursors to move the character
         this.cursors = this.input.keyboard.createCursorKeys();
         //For debugging purposes
@@ -34,6 +38,8 @@ class GameScene extends Phaser.Scene {
         this.movements();
         this.shoot();
         
+        //Check the delay
+        this.checkingDelay();
     }
 
     
@@ -48,6 +54,18 @@ class GameScene extends Phaser.Scene {
         this.player = this.physics.add.sprite(config.width / 2, config.height / 2, 'gunner');
         this.faceRight = true;
         this.player.setCollideWorldBounds(true);
+    }
+
+    //Add the bulletDelay and set it up
+    createDelay(){
+        this.bulletDelay = fireRate;
+    }
+
+    //Check if the bulletDelay is at the fireRate and ++ if not
+    checkingDelay(){
+        if(this.bulletDelay <= fireRate-1){
+            this.bulletDelay++;
+        }
     }
 
     //Take care of all possible movements done by the character 
@@ -91,8 +109,9 @@ class GameScene extends Phaser.Scene {
 
     //Allows the character to shoot with SPACEBAR
     shoot() {
-        if (this.cursors.space.isDown) {
+        if (this.cursors.space.isDown && this.bulletDelay == fireRate) {
             this.bulletGroup.shootBullet(this.player.x, this.player.y, this.faceRight);
+            this.bulletDelay = 0;
         }
     }
 
@@ -150,4 +169,8 @@ const config = {
     scene: GameScene
 };
 
+//Define all constants
+const fireRate = 10;
+
 const game = new Phaser.Game(config);
+
