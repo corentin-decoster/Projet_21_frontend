@@ -15,38 +15,44 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        //Creating the backgroung, the character and the animations
         this.createBackground();
         this.createCharacter();
         this.createAnims();
+        //Creating a bulletGroup which will be the ammunitions available for the character to shoot
         this.bulletGroup = new BulletGroup(this);
 
+        //Adding cursors to move the character
         this.cursors = this.input.keyboard.createCursorKeys();
+        //For debugging purposes
         console.log(this);
     }
 
     update() {
-        //espace pour tirer
-        if (this.cursors.space.isDown) {
-            this.bulletGroup.shootBullet(this.player.x, this.player.y, this.faceRight);
-        }
-
-
-        //deplacement :)
+        //Constantly update to take care of user's input
+        //User can make his character move and shoot
+        this.shoot();
         this.movements();
     }
 
     
 
+    //Add the background
     createBackground(){
         this.add.image(config.width / 2, config.height / 2, 'tempBackground');
     }
 
+    //Add the character and set up some variables
     createCharacter(){
         this.player = this.physics.add.sprite(config.width / 2, config.height / 2, 'tempPerso');
         this.faceRight = true;
         this.player.setCollideWorldBounds(true);
     }
 
+    //Take care of all possible movements done by the character 
+    //Including : left - right - jump
+    //
+    //Animations are also displayed
     movements(){
         if (this.cursors.right.isDown) {
             this.faceRight = true;
@@ -95,6 +101,14 @@ class GameScene extends Phaser.Scene {
 
     }
 
+    //Allows the character to shoot with SPACEBAR
+    shoot() {
+        if (this.cursors.space.isDown) {
+            this.bulletGroup.shootBullet(this.player.x, this.player.y, this.faceRight);
+        }
+    }
+
+    //Create all the animations needed
     createAnims(){
         this.anims.create({
             key: 'left',
