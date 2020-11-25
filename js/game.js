@@ -30,33 +30,58 @@ var config = {
 var game = new Phaser.Game(config);
 var player;
 var cursors;
+var faceRight;
 
 function preload ()
 {
     this.load.image('tempBackground', 'assets/tempBackground.jpg');
-    this.load.spritesheet('tempPerso', 'assets/Skinless Yarik/body/firstcharacter.png', { frameWidth: 34, frameHeight: 34 }); 
+    this.load.spritesheet('tempPerso', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line.png', { frameWidth: 48, frameHeight: 48 }); 
 }
 
 function create ()
 {
     this.add.image(config.width / 2, config.height / 2, 'tempBackground');
     player = this.physics.add.sprite(config.width / 2, config.height / 2, 'tempPerso');
+    faceRight = true;
 
-    player.setScale(2,2);
     player.setCollideWorldBounds(true);
 
     cursors = this.input.keyboard.createCursorKeys();
 
     this.anims.create({
         key: 'left',
-        frames: [ { key: 'tempPerso', frame: 0 } ],
-        frameRate: 1
+        frames: this.anims.generateFrameNumbers('tempPerso', { start: 14, end: 19 }),
+        frameRate: 10
     });
 
     this.anims.create({
         key: 'right',
-        frames: [ { key: 'tempPerso', frame: 1 } ],
-        frameRate: 1
+        frames: this.anims.generateFrameNumbers('tempPerso', { start: 20, end: 25 }),
+        frameRate: 10
+    });
+
+    this.anims.create({
+        key: 'idleRight',
+        frames: this.anims.generateFrameNumbers('tempPerso', { start: 0, end: 4 }),
+        frameRate: 10
+    });
+
+    this.anims.create({
+        key: 'idleLeft',
+        frames: this.anims.generateFrameNumbers('tempPerso', { start: 5, end: 9 }),
+        frameRate: 10
+    });
+
+    this.anims.create({
+        key: 'jumpRight',
+        frames: this.anims.generateFrameNumbers('tempPerso', { start: 10, end: 11 }),
+        frameRate: 10
+    });
+
+    this.anims.create({
+        key: 'jumpLeft',
+        frames: this.anims.generateFrameNumbers('tempPerso', { start: 12, end: 13 }),
+        frameRate: 10
     });
 
     console.log(this);
@@ -65,19 +90,47 @@ function create ()
 function update()
 {
     if(cursors.right.isDown){
+        faceRight = true;
         player.setVelocityX(160);
-        player.anims.play('right');
+        if(player.body.blocked.down)
+            player.anims.play('right', true);
+        else if(!player.body.blocked.down)
+            player.anims.play('jumpRight', true);
     }
     else if(cursors.left.isDown){
+        faceRight = false;
         player.setVelocityX(-160);
-        player.anims.play('left');
+        if(player.body.blocked.down)
+            player.anims.play('left', true);
+        else if(!player.body.blocked.down)
+            player.anims.play('jumpLeft', true);    
         
     }
     else{
         player.setVelocityX(0);
+
+        if(faceRight)
+            player.anims.play('idleRight', true);
+        else
+            player.anims.play('idleLeft', true);
+            
     }
 
-    if(cursors.up.isDown && player.body.blocked.down){
-        player.setVelocityY(-250);
+    if(cursors.up.isDown){
+        if(player.body.blocked.down){
+            player.setVelocityY(-250);
+            if(faceRight)
+                player.anims.play('jumpRight', true);
+            else
+                player.anims.play('jumpLeft', true);
+        }
+        else{
+            if(cursors.right.isDown){
+                player.anims.play('jumpRight', true);
+            }
+            else if(cursors.left.isDown){
+                player.anims.play('jumpLeft', true);
+            }
+        }
     }
 }
