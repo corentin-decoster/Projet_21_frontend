@@ -9,10 +9,9 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('tempBackground', 'assets/tempBackground.jpg');
+        this.load.image('tempBackground', 'assets/FrozenForest_Tilese_Background.png');
         this.load.spritesheet('tempPerso', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line.png', { frameWidth: 48, frameHeight: 48 });
-        //this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
-        this.load.image('bullet', 'assets/testPerso.jpg ');
+        this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
     }
 
     create() {
@@ -137,8 +136,8 @@ class GameScene extends Phaser.Scene {
 
 const config = {
     type: Phaser.AUTO,
-    width: 900,
-    height: 400,
+    width: 512,
+    height: 256,
     physics: {
         default: 'arcade',
         arcade: {
