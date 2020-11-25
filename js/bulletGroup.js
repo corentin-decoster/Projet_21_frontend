@@ -8,14 +8,14 @@ export default class BulletGroup extends Phaser.Physics.Arcade.Group{
             frameQuantity : 30,
             active : false,
             visible : false,
-            key : 'bullet'
+            key : 'bullet' 
         })
     }
 
-    shootBullet(x,y){
+    shootBullet(x,y,faceRight){
         const bullet = this.getFirstDead(false);
         if(bullet){
-            bullet.fire(x,y);
+            bullet.fire(x,y,faceRight);
         }
     }
 }

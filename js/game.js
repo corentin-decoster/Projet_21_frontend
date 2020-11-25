@@ -1,4 +1,4 @@
-//import BulletGroup from "./bulletGroup.js";
+import BulletGroup from "./bulletGroup.js";
 class GameScene extends Phaser.Scene {
     constructor() {
         super();
@@ -150,55 +150,3 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
-
-class Bullet extends Phaser.Physics.Arcade.Sprite {
-    
-    constructor(scene,x,y){
-        super(scene,x,y,'bullet');
-        
-    }
-
-    fire(x,y,faceRight){
-        this.body.setAllowGravity(false);
-        
-        this.body.reset(x,y);
-        this.setActive(true);
-        this.setVisible(true);
-
-        if(faceRight){
-            this.setVelocityX(900);
-        }else if(!faceRight){
-            this.setVelocityX(-900);
-        }
-    }
-
-    preUpdate(time, delta){
-        super.preUpdate(time, delta);
-
-        if(this.x >=900 || this.x <= 0){
-            this.setActive(false);
-            this.setVisible(false);
-        }
-    }
-}
-
-class BulletGroup extends Phaser.Physics.Arcade.Group{
-    constructor(scene){
-        super(scene.physics.world, scene);
-
-        this.createMultiple({
-            classType : Bullet,
-            frameQuantity : 30,
-            active : false,
-            visible : false,
-            key : 'bullet' 
-        })
-    }
-
-    shootBullet(x,y,faceRight){
-        const bullet = this.getFirstDead(false);
-        if(bullet){
-            bullet.fire(x,y,faceRight);
-        }
-    }
-}
