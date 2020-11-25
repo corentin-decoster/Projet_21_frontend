@@ -1,9 +1,11 @@
+import BulletGroup from "./bulletGroup.js";
 class GameScene extends Phaser.Scene {
     constructor() {
         super();
         this.player;
         this.cursors;
         this.faceRight;
+        this.bulletGroup;
     }
 
     preload() {
@@ -16,6 +18,7 @@ class GameScene extends Phaser.Scene {
         this.createBackground();
         this.createCharacter();
         this.createAnims();
+        this.bulletGroup = new BulletGroup(this);
 
         this.cursors = this.input.keyboard.createCursorKeys();
         console.log(this);
