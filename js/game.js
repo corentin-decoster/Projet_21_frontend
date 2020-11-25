@@ -1,4 +1,4 @@
-import BulletGroup from "./bulletGroup.js";
+//import BulletGroup from "./bulletGroup.js";
 class GameScene extends Phaser.Scene {
     constructor() {
         super();
@@ -11,7 +11,8 @@ class GameScene extends Phaser.Scene {
     preload() {
         this.load.image('tempBackground', 'assets/tempBackground.jpg');
         this.load.spritesheet('tempPerso', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line.png', { frameWidth: 48, frameHeight: 48 });
-        this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
+        //this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
+        this.load.image('bullet', 'assets/testPerso.jpg ');
     }
 
     create() {
@@ -25,15 +26,17 @@ class GameScene extends Phaser.Scene {
     }
 
     update() {
-        //W pour tirer
+        //espace pour tirer
         if (this.cursors.space.isDown) {
-            shoot(this.player.x, this.player.y);
+            this.bulletGroup.shootBullet(this.player.x, this.player.y, this.faceRight);
         }
 
 
         //deplacement :)
         this.movements();
     }
+
+    
 
     createBackground(){
         this.add.image(config.width / 2, config.height / 2, 'tempBackground');
@@ -147,3 +150,55 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
+class Bullet extends Phaser.Physics.Arcade.Sprite {
+    
+    constructor(scene,x,y){
+        super(scene,x,y,'bullet');
+        
+    }
+
+    fire(x,y,faceRight){
+        this.body.setAllowGravity(false);
+        
+        this.body.reset(x,y);
+        this.setActive(true);
+        this.setVisible(true);
+
+        if(faceRight){
+            this.setVelocityX(900);
+        }else if(!faceRight){
+            this.setVelocityX(-900);
+        }
+    }
+
+    preUpdate(time, delta){
+        super.preUpdate(time, delta);
+
+        if(this.x >=900 || this.x <= 0){
+            this.setActive(false);
+            this.setVisible(false);
+        }
+    }
+}
+
+class BulletGroup extends Phaser.Physics.Arcade.Group{
+    constructor(scene){
+        super(scene.physics.world, scene);
+
+        this.createMultiple({
+            classType : Bullet,
+            frameQuantity : 30,
+            active : false,
+            visible : false,
+            key : 'bullet' 
+        })
+    }
+
+    shootBullet(x,y,faceRight){
+        const bullet = this.getFirstDead(false);
+        if(bullet){
+            bullet.fire(x,y,faceRight);
+        }
+    }
+}
