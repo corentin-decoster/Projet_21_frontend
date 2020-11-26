@@ -16,9 +16,9 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
         //Determining if the bullet has to go to the left side or the right side
         if(faceRight){
-            this.setVelocityX(900);
+            this.setVelocityX(500);
         }else if(!faceRight){
-            this.setVelocityX(-900);
+            this.setVelocityX(-500);
         }
     }
 

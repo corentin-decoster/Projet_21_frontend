@@ -38,7 +38,7 @@ class GameScene extends Phaser.Scene {
         this.movements();
         this.shoot();
         
-        //Check the delay
+        //Check the delay for the firerate
         this.checkingDelay();
     }
 
