@@ -1,3 +1,4 @@
+import Bullet from "./bullet.js";
 import BulletGroup from "./bulletGroup.js";
 class GameScene extends Phaser.Scene {
     constructor() {
@@ -5,14 +6,18 @@ class GameScene extends Phaser.Scene {
         this.player;
         this.cursors;
         this.faceRight;
-        this.bulletGroup;
+        this.ennemyFaceRight;
+        this.PlayerBulletGroup;
+        this.EnnemyBulletGroup;
         this.bulletDelay;
+        this.ennemy;
     }
 
     preload() {
         this.load.image('tempBackground', 'assets/FrozenForest_Tilese_Background.png');
         this.load.spritesheet('gunner', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line.png', { frameWidth: 48, frameHeight: 48 });
         this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
+        this.load.spritesheet('ennemy','assets/TeamGunner/CHARACTER_SPRITES/Red/Gunner_Red_idle.png', { frameWidth: 48, frameHeight: 48 });
     }
 
     create() {
@@ -20,8 +25,12 @@ class GameScene extends Phaser.Scene {
         this.createBackground();
         this.createCharacter();
         this.createAnims();
+
+        //Creating ennemies and their animation + bullet of the ennemy
+        this.createEnnemy();
+        this.createAnimsEnnemy();
         //Creating a bulletGroup which will be the ammunitions available for the character to shoot
-        this.bulletGroup = new BulletGroup(this);
+        this.PlayerBulletGroup = new BulletGroup(this);
 
         //Adding a delay on the fire rate
         this.createDelay();
@@ -36,7 +45,9 @@ class GameScene extends Phaser.Scene {
         //Constantly update to take care of user's input
         //User can make his character move and shoot
         this.movements();
+        this.ennemyMovements();
         this.shoot();
+     //   this.Ennemyshoot();
         
         //Check the delay for the firerate
         this.checkingDelay();
@@ -54,6 +65,14 @@ class GameScene extends Phaser.Scene {
         this.player = this.physics.add.sprite(config.width / 2, config.height / 2, 'gunner');
         this.faceRight = true;
         this.player.setCollideWorldBounds(true);
+    }
+
+    createEnnemy(){
+        this.ennemy = this.physics.add.sprite(300 ,200,'ennemy');
+        this.faceRight = true;
+        this.ennemy.setCollideWorldBounds(true);
+        
+      
     }
 
     //Add the bulletDelay and set it up
@@ -107,15 +126,34 @@ class GameScene extends Phaser.Scene {
         }
     }
 
+    ennemyMovements(){
+        if (this.player.x - this.ennemy.x > 0)
+        {           
+           this.ennemy.scaleX = 1;
+           this.ennemyFaceRight = true;
+            
+        } else {
+            this.ennemy.scaleX = -1;
+            this.ennemyFaceRight = false;
+        }
+        this.ennemy.anims.play('idleEnnemy',true);
+        
+    }
+
     //Allows the character to shoot with SPACEBAR
     shoot() {
         if (this.cursors.space.isDown && this.bulletDelay == fireRate) {
-            this.bulletGroup.shootBullet(this.player.x, this.player.y, this.faceRight);
+            this.PlayerBulletGroup.shootBullet(this.player.x, this.player.y, this.faceRight);
             this.bulletDelay = 0;
         }
     }
 
-    //Create all the animations needed
+    Ennemyshoot(){
+  //      this.EnnemyBulletGroup.shootBullet(this.ennemy.x, this.ennemy.y,this.ennemyFaceRight);
+   //         this.bulletDelay = 0;
+    }
+
+    //Create all the animations needed for the player
     createAnims(){
         this.anims.create({
             key: 'left',
@@ -153,6 +191,19 @@ class GameScene extends Phaser.Scene {
             frameRate: 10
         });
     }
+
+    //Create all the animations needed for the ennemy
+    createAnimsEnnemy(){
+
+        this.anims.create({
+            key: 'idleEnnemy',
+            frames: this.anims.generateFrameNumbers('ennemy', { start: 0, end: 4 }),
+            frameRate: 10
+        });
+      
+     
+    }
+    
 }
 
 const config = {
