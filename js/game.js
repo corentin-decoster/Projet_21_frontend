@@ -15,7 +15,7 @@ class GameScene extends Phaser.Scene {
 
     preload() {
         this.load.image('tempBackground', 'assets/FrozenForest_Tilese_Background.png');
-        this.load.spritesheet('gunner', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line.png', { frameWidth: 48, frameHeight: 48 });
+        this.load.spritesheet('gunner', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line2.png', { frameWidth: 28, frameHeight: 35 });
         this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
         this.load.spritesheet('ennemy','assets/TeamGunner/CHARACTER_SPRITES/Red/Gunner_Red_idle.png', { frameWidth: 48, frameHeight: 48 });
     }
@@ -49,7 +49,7 @@ class GameScene extends Phaser.Scene {
         this.shoot();
      //   this.Ennemyshoot();
         
-        //Check the delay for the firerate
+        //Check the delay for the firerate 
         this.checkingDelay();
     }
 
