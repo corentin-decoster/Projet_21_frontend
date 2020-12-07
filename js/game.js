@@ -1,5 +1,7 @@
 import Bullet from "./bullet.js";
 import BulletGroup from "./bulletGroup.js";
+import Enemy from "./enemy.js";
+import EnemyGroup from "./enemyGroup.js";
 class GameScene extends Phaser.Scene {
     constructor() {
         super();
@@ -11,6 +13,12 @@ class GameScene extends Phaser.Scene {
         this.EnnemyBulletGroup;
         this.bulletDelay;
         this.ennemy;
+        this.ennemy1;
+        this.ennemy2;
+        this.ennemy3;
+        this.ennemy4;
+        this.ennemy5;
+        this.enemyGroup;
         this.timerText;
         this.timerTimeEvent;
         this.completedTime;
@@ -49,14 +57,16 @@ class GameScene extends Phaser.Scene {
         this.input.keyboard.on('keydown_W', this.stopAndSaveTimer, this);
 
         //Creating ennemies and their animation + bullet of the ennemy
-        this.createEnnemy();
-        this.createAnimsEnnemy();
+        
+       
+        
         
         //Creating a bulletGroup which will be the ammunitions available for the character to shoot
         this.PlayerBulletGroup = new BulletGroup(this);
         //this.physics.add.group({ classType: Bullet, runChildUpdate: true });
-		
+        this.createEnnemy(450,0);
         this.physics.add.collider(this.ennemy, this.PlayerBulletGroup,this.enemyHit,null,this);
+        //this.physics.add.collider(this.enemyGroup, this.PlayerBulletGroup,this.enemyHit,null,this);
         //this.physics.add.overlap(this.ennemy, this.PlayerBulletGroup, this.enemyHit, null, this);
 
         //Adding a delay on the fire rate
@@ -107,20 +117,19 @@ class GameScene extends Phaser.Scene {
     }
     createLvlOnePlateform(){
         this.mapLayer=this.map.createStaticLayer(0,this.tileset,0,0);
-        this.mapLayer.setCollisionByExclusion([-1])
+        this.mapLayer.setCollisionByExclusion([-1]);
         console.log(this.mapLayer);
         
     }
 
-    createEnnemy(){
-        this.ennemy = this.physics.add.sprite(300 ,200,'ennemy');
+    createEnnemy(x,y){
+        this.ennemy = this.physics.add.sprite(x ,y,'ennemy');
         this.faceRight = true;
         this.ennemy.setCollideWorldBounds(true);
         this.physics.add.collider(this.ennemy, this.mapLayer);
         //this.physics.add.collider(this.ennemy, Bullet.type);
         this.ennemyAlive=true;
-        
-      
+        this.createAnimsEnnemy();   
     }
 
     //Add the bulletDelay and set it up
@@ -210,6 +219,7 @@ class GameScene extends Phaser.Scene {
         ennemy.destroy();
         bullet.destroy();
         this.ennemyAlive=false;
+        this.stopAndSaveTimer();
         
     }
 
