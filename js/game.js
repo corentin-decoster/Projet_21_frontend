@@ -11,13 +11,22 @@ class GameScene extends Phaser.Scene {
         this.EnnemyBulletGroup;
         this.bulletDelay;
         this.ennemy;
+        this.timerText;
+        this.timerTimeEvent;
+        this.completedTime;
+        this.playedTime;
+        this.inGameBoolean;
     }
 
     preload() {
-        this.load.image('tempBackground', 'assets/FrozenForest_Tilese_Background.png');
+        this.load.image('tempBackground', 'assets/Map/Wasteland_Sky.png');
         this.load.spritesheet('gunner', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line2.png', { frameWidth: 28, frameHeight: 35 });
         this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
         this.load.spritesheet('ennemy','assets/TeamGunner/CHARACTER_SPRITES/Red/Gunner_Red_idle.png', { frameWidth: 48, frameHeight: 48 });
+
+        //map loading
+        this.load.image('map_assets','assets/Map/Wasteland.png');
+        this.load.tilemapTiledJSON('map1','assets/Map/map_wasteland_js_ok.json');
     }
 
     create() {
@@ -26,9 +35,22 @@ class GameScene extends Phaser.Scene {
         this.createCharacter();
         this.createAnims();
 
+        
+        //Creating the Map and layer + collision between player and layer
+        this.createLvlOneMap();
+        this.createLvlOneTileSet();
+        this.createLvlOnePlateform();
+        this.physics.add.collider(this.player, this.mapLayer);
+
+        //Set up Timer
+        this.SetUpTimer();
+        //Set up a key to stop timer for testing purpose
+        this.input.keyboard.on('keydown_W', this.stopAndSaveTimer, this);
+
         //Creating ennemies and their animation + bullet of the ennemy
         this.createEnnemy();
         this.createAnimsEnnemy();
+        this.physics.add.overlap(this.ennemy, this.PlayerBulletGroup, this.enemyHit, null, this);
         //Creating a bulletGroup which will be the ammunitions available for the character to shoot
         this.PlayerBulletGroup = new BulletGroup(this);
 
@@ -43,12 +65,13 @@ class GameScene extends Phaser.Scene {
 
     update() {
         //Constantly update to take care of user's input
+        //timer test
         //User can make his character move and shoot
         this.movements();
         this.ennemyMovements();
         this.shoot();
-     //   this.Ennemyshoot();
-        
+     //   this.Ennemyshoot(); 
+
         //Check the delay for the firerate 
         this.checkingDelay();
     }
@@ -67,10 +90,25 @@ class GameScene extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
     }
 
+    //Add first level
+    createLvlOneMap(){
+        this.map=this.make.tilemap({key: 'map1'});
+    }
+    createLvlOneTileSet(){
+        this.tileset=this.map.addTilesetImage('map_assets_js','map_assets');
+    }
+    createLvlOnePlateform(){
+        this.mapLayer=this.map.createStaticLayer(0,this.tileset,0,0);
+        this.mapLayer.setCollisionByExclusion([-1])
+        console.log(this.mapLayer);
+        
+    }
+
     createEnnemy(){
         this.ennemy = this.physics.add.sprite(300 ,200,'ennemy');
         this.faceRight = true;
         this.ennemy.setCollideWorldBounds(true);
+        this.physics.add.collider(this.ennemy, this.mapLayer);
         
       
     }
@@ -152,6 +190,12 @@ class GameScene extends Phaser.Scene {
   //      this.EnnemyBulletGroup.shootBullet(this.ennemy.x, this.ennemy.y,this.ennemyFaceRight);
    //         this.bulletDelay = 0;
     }
+    enemyHit(ennemy,bullet){
+        console.log("ennemy hit");
+        ennemy.destroy();
+        bullet.destroy();
+        
+    }
 
     //Create all the animations needed for the player
     createAnims(){
@@ -203,13 +247,56 @@ class GameScene extends Phaser.Scene {
       
      
     }
+
+    //handling the timer
+    SetUpTimer(){
+        this.inGameBoolean=true;
+        this.playedTime = 0;
+
+        this.timerText = this.add.text(32, 32, 'Timer: ' + this.formatTime(this.playedTime));
+
+        // Each 1000 ms call onEvent
+        this.timerTimeEvent= this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
+        /*
+        this.timerText = this.add.text(32, 32);
+    
+        // Each 1000 ms call onEvent
+        //timerTimeEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
+        this.timerTimeEvent = this.time.delayedCall(3000, this.onEvent, [], this);
+        */
+    }
+    formatTime(seconds){
+        //from phaser tutorial method to formate time 
+        var minutes = Math.floor(seconds/60);
+        // Seconds
+        var partInSeconds = seconds%60;
+        // Adds left zeros to seconds
+        partInSeconds = partInSeconds.toString().padStart(2,'0');
+        // Returns formated time
+        return `${minutes}:${partInSeconds}`;
+    }
+    onEvent(){
+        if(this.inGameBoolean===true){
+            this.playedTime += 1; // One second
+            this.timerText.setText('Timer: ' + this.formatTime(this.playedTime));
+        }else{
+            
+        }
+    }
+
+    stopAndSaveTimer(){
+        this.inGameBoolean=false;
+        this.completedTime=this.playedTime;
+    }
     
 }
 
+
+
 const config = {
     type: Phaser.AUTO,
-    width: 512,
-    height: 256,
+    width: 800,
+    height: 560,
     physics: {
         default: 'arcade',
         arcade: {
