@@ -8,6 +8,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     fire(x,y,faceRight){
         //We want to fire straight bullets
         this.body.setAllowGravity(false);
+        
 
         //We move the bullet onto the character and activate it + making it visible
         this.body.reset(x,y);

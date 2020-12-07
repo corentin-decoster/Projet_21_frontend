@@ -9,7 +9,8 @@ export default class BulletGroup extends Phaser.Physics.Arcade.Group{
             frameQuantity : 30,
             active : false,
             visible : false,
-            key : 'bullet' 
+            key : 'bullet',
+            runChildUpdate : true 
         })
     }
 

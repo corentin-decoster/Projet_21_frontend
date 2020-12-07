@@ -16,6 +16,7 @@ class GameScene extends Phaser.Scene {
         this.completedTime;
         this.playedTime;
         this.inGameBoolean;
+        this.ennemyAlive;
     }
 
     preload() {
@@ -50,9 +51,13 @@ class GameScene extends Phaser.Scene {
         //Creating ennemies and their animation + bullet of the ennemy
         this.createEnnemy();
         this.createAnimsEnnemy();
-        this.physics.add.overlap(this.ennemy, this.PlayerBulletGroup, this.enemyHit, null, this);
+        
         //Creating a bulletGroup which will be the ammunitions available for the character to shoot
         this.PlayerBulletGroup = new BulletGroup(this);
+        //this.physics.add.group({ classType: Bullet, runChildUpdate: true });
+		
+        this.physics.add.collider(this.ennemy, this.PlayerBulletGroup,this.enemyHit,null,this);
+        //this.physics.add.overlap(this.ennemy, this.PlayerBulletGroup, this.enemyHit, null, this);
 
         //Adding a delay on the fire rate
         this.createDelay();
@@ -68,7 +73,10 @@ class GameScene extends Phaser.Scene {
         //timer test
         //User can make his character move and shoot
         this.movements();
-        this.ennemyMovements();
+        if(this.ennemyAlive){
+            this.ennemyMovements();
+        }
+            
         this.shoot();
      //   this.Ennemyshoot(); 
 
@@ -109,6 +117,8 @@ class GameScene extends Phaser.Scene {
         this.faceRight = true;
         this.ennemy.setCollideWorldBounds(true);
         this.physics.add.collider(this.ennemy, this.mapLayer);
+        //this.physics.add.collider(this.ennemy, Bullet.type);
+        this.ennemyAlive=true;
         
       
     }
@@ -174,7 +184,12 @@ class GameScene extends Phaser.Scene {
             this.ennemy.scaleX = -1;
             this.ennemyFaceRight = false;
         }
-        this.ennemy.anims.play('idleEnnemy',true);
+        if(this.ennemyAlive){
+            this.ennemy.anims.play('idleEnnemy', () => {
+                this.postclean();
+            });
+        }
+            
         
     }
 
@@ -194,6 +209,7 @@ class GameScene extends Phaser.Scene {
         console.log("ennemy hit");
         ennemy.destroy();
         bullet.destroy();
+        this.ennemyAlive=false;
         
     }
 
