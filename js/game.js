@@ -211,8 +211,8 @@ class GameScene extends Phaser.Scene {
     }
 
     Ennemyshoot(){
-  //      this.EnnemyBulletGroup.shootBullet(this.ennemy.x, this.ennemy.y,this.ennemyFaceRight);
-   //         this.bulletDelay = 0;
+   //      this.EnnemyBulletGroup.shootBullet(this.ennemy.x, this.ennemy.y,this.ennemyFaceRight);
+   //      this.bulletDelay = 0;
     }
     enemyHit(ennemy,bullet){
         console.log("ennemy hit");
