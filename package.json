@@ -1,0 +1,26 @@
+{
+  "name": "Projet_21_frontend",
+  "version": "1.0.0",
+  "description": "Game Javascript with Phaser 4 dev.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corentin-decoster/Projet_21_frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/corentin-decoster/Projet_21_frontend/issues"
+  },
+  "homepage": "https://github.com/corentin-decoster/Projet_21_frontend#readme",
+  "dependencies": {
+    "webpack": "^5.10.0",
+    "webpack-cli": "^4.2.0"
+  }
+}
