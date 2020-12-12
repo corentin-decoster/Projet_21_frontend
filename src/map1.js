@@ -1,10 +1,10 @@
 import Bullet from "./bullet.js";
 import BulletGroup from "./bulletGroup.js";
 const fireRate = 10;
-class Map2 extends Phaser.Scene {
+class Map1 extends Phaser.Scene {
 
 	constructor() {
-		super({key : 'map2'});
+		super({key : 'map1'});
 		this.player;
         this.cursors;
         this.faceRight;
@@ -33,7 +33,7 @@ class Map2 extends Phaser.Scene {
         this.load.spritesheet('ennemy','assets/TeamGunner/CHARACTER_SPRITES/Red/Gunner_Red_idle.png', { frameWidth: 48, frameHeight: 48 });
 	
 		this.load.image('map_assets','assets/Map/Wasteland.png');
-        this.load.tilemapTiledJSON('map2','assets/Map/Map2.json');
+        this.load.tilemapTiledJSON('map1','assets/Map/Map1.json');
 	}
 
 	create() {
@@ -101,7 +101,7 @@ class Map2 extends Phaser.Scene {
 	}
 	//Add first level
     createLvlOneMap(){
-        this.map=this.make.tilemap({key: 'map2'});
+        this.map=this.make.tilemap({key: 'map1'});
     }
     createLvlOneTileSet(){
         this.tileset=this.map.addTilesetImage('map_assets_js','map_assets');
@@ -203,7 +203,7 @@ class Map2 extends Phaser.Scene {
 	enemyHit(ennemy,bullet){
         console.log("ennemy hit");
         if(this.lvlOneSpawnPoint.length<=8){
-            this.scene.switch('map3');
+            this.scene.switch('map2');
             return;
         }
         ennemy.x=this.lvlOneSpawnPoint.pop();
@@ -258,8 +258,8 @@ class Map2 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('gunner', { start: 12, end: 13 }),
             frameRate: 10
         });
-    }
-        //Create all the animations needed for the ennemy
+	}
+	    //Create all the animations needed for the ennemy
     createAnimsEnnemy(){
 
         this.anims.create({
@@ -319,4 +319,4 @@ class Map2 extends Phaser.Scene {
 
 }
 
-export default Map2;
+export default Map1;
