@@ -1,6 +1,7 @@
 import Bullet from "./bullet.js";
 import BulletGroup from "./bulletGroup.js";
 import EnnemyBulletGroup from "./EnnemyBulletGroup.js"
+import Map1 from "./map1.js"
 
 const fireRate = 10;
 const ennemyFireRate = 3;
@@ -20,7 +21,7 @@ class Map2 extends Phaser.Scene {
         this.timerText;
         this.timerTimeEvent;
         this.completedTime;
-        this.playedTime;
+        this.playedTime=this.time;
         this.inGameBoolean;
         this.lvlOneSpawnPoint;
         this.nameLvlMap;
@@ -295,9 +296,11 @@ class Map2 extends Phaser.Scene {
 	  //handling the timer
     SetUpTimer(){
         this.inGameBoolean=true;
-        this.playedTime = 0;
+        //console.log(Map1.time);
+        console.log(Map1.playedTime);
+        //this.playedTime= 0 + Map1.time;
 
-        this.timerText = this.add.text(32, 32, 'Timer: ' + this.formatTime(this.playedTime));
+        this.timerText = this.add.text(32, 32, 'Timer: ' + this.formatTime(Map1.playedTime));
 
         // Each 1000 ms call onEvent
         this.timerTimeEvent= this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
@@ -322,7 +325,7 @@ class Map2 extends Phaser.Scene {
     onEvent(){
         if(this.inGameBoolean===true){
             this.playedTime += 1; // One second
-            this.timerText.setText('Timer: ' + this.formatTime(this.playedTime));
+            this.timerText.setText('Timer: ' + this.formatTime(Map1.playedTime));
         }else{
             
         }

@@ -20,7 +20,7 @@ class Map1 extends Phaser.Scene {
         this.timerText;
         this.timerTimeEvent;
         this.completedTime;
-        this.playedTime;
+        this.playedTime; 
         this.inGameBoolean;
         this.lvlOneSpawnPoint;
         this.nameLvlMap;
@@ -50,7 +50,8 @@ class Map1 extends Phaser.Scene {
 	   this.createALvl();
         
         this.createSpawnPointLvl(180,380,400,750,300,500,150,600);
-        //Set up Timer
+        //Set up 
+        this.playedTime = this.time;
         this.SetUpTimer();
         //Set up a key to stop timer for testing purpose
         this.input.keyboard.on('keydown_W', this.stopAndSaveTimer, this);
@@ -334,7 +335,12 @@ class Map1 extends Phaser.Scene {
         this.inGameBoolean=false;
         this.completedTime=this.playedTime;
     }
-	end() {
+
+    getTimer(){
+        return this.playedTime;
+    }
+
+    end() {
 		
 	}
 
