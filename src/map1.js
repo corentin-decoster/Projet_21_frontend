@@ -226,7 +226,7 @@ class Map1 extends Phaser.Scene {
         console.log("ennemy hit");
         if(this.lvlOneSpawnPoint.length<=8){
             console.log(this.playedTime+"time before switch");
-            this.scene.start('map2', {time:this.playedTime});
+            this.scene.start('endMenu', {time:this.playedTime});
             return;
         }
         ennemy.x=this.lvlOneSpawnPoint.pop();

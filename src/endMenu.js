@@ -53,7 +53,7 @@ class EndMenu extends Phaser.Scene {
                         ease: 'Power3',
                         yoyo: true
                     });
-                            }
+                }
             }
     
         });
