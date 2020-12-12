@@ -225,7 +225,7 @@ class Map3 extends Phaser.Scene {
 	enemyHit(ennemy,bullet){
         console.log("ennemy hit");
         if(this.lvlOneSpawnPoint.length<=8){
-            //fin du jeu
+            this.scene.start('endMenu', {time:this.playedTime})
             return;
         }
         ennemy.x=this.lvlOneSpawnPoint.pop();
