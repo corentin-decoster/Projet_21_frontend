@@ -7,6 +7,7 @@ class EndMenu extends Phaser.Scene {
     this.playedTime;
     this.player;
     this.myScore;
+    this.menu;
     
 
     }
@@ -23,7 +24,9 @@ class EndMenu extends Phaser.Scene {
 
     create() {
         this.add.image(370,150,'score');
-        this.add.text(400,280,`MY SCORE HUEHUE IS : ${this.playedTime}`);
+        this.menu = this.add.text(300,480,'RETOUR AU MENU');
+        this.menu.setInteractive({ useHandCursor: true });
+        this.menu.on('pointerdown', () => this.clickButton());
         var element = this.add.dom(400, 250).createFromCache('form');
         element.addListener('click');
         element.on('click', function (event) {
@@ -74,7 +77,7 @@ class EndMenu extends Phaser.Scene {
 
 
    clickButton() {
-       this.scene.start('score');
+       this.scene.start('menu');
    }
 
    postMyScore(){
