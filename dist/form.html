@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
     <div id='sc'>
-    <form action="http://localhost:8000/user" method="POST">
+    <form  action='http://localhost:8000/user' method="POST" target='hiddenFrame'>
        
             <label for="Player">Player</label>
             <input type="text" name="player" placeholder="entre ton pseudo">
@@ -10,4 +10,5 @@
             <button type="submit" class="btn btn-primary" name="playButton">Enter</button>
     </form>
 </div>
-       
+
+<iframe name="hiddenFrame" width="0" height="0"  style="display: none;"></iframe>

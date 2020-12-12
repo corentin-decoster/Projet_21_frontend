@@ -224,7 +224,7 @@ class Map2 extends Phaser.Scene {
 	//collide between player
 	enemyHit(ennemy,bullet){
         console.log("ennemy hit");
-        if(this.lvlOneSpawnPoint.length<=8){
+        if(this.lvlOneSpawnPoint.length<=0){
             this.scene.start('map3', {time:this.playedTime});
             return;
         }

@@ -5,6 +5,8 @@ class EndMenu extends Phaser.Scene {
     constructor(){
     super({key:'endMenu'});
     this.playedTime;
+    this.player;
+    this.myScore;
     
 
     }
@@ -24,24 +26,25 @@ class EndMenu extends Phaser.Scene {
         this.add.text(400,280,`MY SCORE HUEHUE IS : ${this.playedTime}`);
         var element = this.add.dom(400, 250).createFromCache('form');
         element.addListener('click');
-
         element.on('click', function (event) {
     
             if (event.target.name === 'playButton')
             {
-                var inputText = this.getChildByName('nameField');
+                this.player = this.getChildByName('player');
+                this.myScore= this.getChildByName('score');
     
                 //  Have they entered anything?
-                if (inputText.value !== '')
+                if (this.player.value !== '')
                 {
                     //  Turn off the click events
                     this.removeListener('click');
     
                     //  Hide the login element
                     this.setVisible(false);
-    
+                    
                     //  Populate the text with whatever they typed in
-                    text.setText('Welcome ' + inputText.value);
+                    //postMyScore();
+                    
                 }
                 else
                 {
@@ -60,6 +63,14 @@ class EndMenu extends Phaser.Scene {
 
        
    }
+   update(){
+       if(!this.gameStop){
+           this.goToScore();
+       }
+   }
+   goToScore(){
+      this.scene.start('score');
+   }
 
 
    clickButton() {
@@ -67,7 +78,23 @@ class EndMenu extends Phaser.Scene {
    }
 
    postMyScore(){
-        
+    try {
+        const options = {
+          method: "POST", 
+          body: JSON.stringify({
+            score:this.myScore,
+            player:this.player
+          }), 
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+    
+        fetch("http://localhost:8000/user", options);
+
+    }catch(error){
+        console.error("error:", error);
+    }
    }
   
    
