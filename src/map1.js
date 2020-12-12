@@ -1,4 +1,4 @@
-import thisNumberValue from "es-abstract/2015/thisNumberValue";
+
 import Bullet from "./bullet.js";
 import BulletGroup from "./bulletGroup.js";
 import EnnemyBulletGroup from "./EnnemyBulletGroup.js"
