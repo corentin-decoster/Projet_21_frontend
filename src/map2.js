@@ -27,8 +27,8 @@ class Map2 extends Phaser.Scene {
         this.nameLvlMap;
 	}
 
-	init() {
-		
+	init(data) {
+		this.playedTime=data.time;
 	};
 
 	preload() {
@@ -225,7 +225,7 @@ class Map2 extends Phaser.Scene {
 	enemyHit(ennemy,bullet){
         console.log("ennemy hit");
         if(this.lvlOneSpawnPoint.length<=8){
-            this.scene.switch('map3');
+            this.scene.start('map3', {time:this.playedTime});
             return;
         }
         ennemy.x=this.lvlOneSpawnPoint.pop();
@@ -297,10 +297,10 @@ class Map2 extends Phaser.Scene {
     SetUpTimer(){
         this.inGameBoolean=true;
         //console.log(Map1.time);
-        console.log(Map1.playedTime);
+        console.log(this.playedTime);
         //this.playedTime= 0 + Map1.time;
 
-        this.timerText = this.add.text(32, 32, 'Timer: ' + this.formatTime(Map1.playedTime));
+        this.timerText = this.add.text(32, 32, 'Timer: ' + this.formatTime(this.playedTime));
 
         // Each 1000 ms call onEvent
         this.timerTimeEvent= this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
@@ -325,7 +325,7 @@ class Map2 extends Phaser.Scene {
     onEvent(){
         if(this.inGameBoolean===true){
             this.playedTime += 1; // One second
-            this.timerText.setText('Timer: ' + this.formatTime(Map1.playedTime));
+            this.timerText.setText('Timer: ' + this.formatTime(this.playedTime));
         }else{
             
         }

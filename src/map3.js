@@ -26,8 +26,8 @@ class Map3 extends Phaser.Scene {
         this.nameLvlMap;
 	}
 
-	init() {
-		
+	init(data) {
+		this.playedTime=data.time;
 	};
 
 	preload() {
@@ -296,7 +296,7 @@ class Map3 extends Phaser.Scene {
 	  //handling the timer
     SetUpTimer(){
         this.inGameBoolean=true;
-        this.playedTime = 0;
+        
 
         this.timerText = this.add.text(32, 32, 'Timer: ' + this.formatTime(this.playedTime));
 
