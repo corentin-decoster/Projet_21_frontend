@@ -3,8 +3,9 @@ import BulletGroup from "./bulletGroup.js";
 import EnnemyBullet from "./EnnemyBullet.js";
 import EnnemyBulletGroup from "./EnnemyBulletGroup.js"
 export default class GameScene extends Phaser.Scene {
+    
     constructor() {
-        super();
+        super({key:'Game'});
         this.player;
         this.cursors;
         this.faceRight;
@@ -21,6 +22,8 @@ export default class GameScene extends Phaser.Scene {
         this.inGameBoolean;
         this.fire;
     }
+
+   
     
 
     preload() {
@@ -35,6 +38,7 @@ export default class GameScene extends Phaser.Scene {
         //map loading
         this.load.image('map_assets','assets/Map/Wasteland.png');
         this.load.tilemapTiledJSON('map1','assets/Map/map_wasteland_js_ok.json');
+        
       
     }
 
@@ -94,12 +98,12 @@ export default class GameScene extends Phaser.Scene {
 
     //Add the background
     createBackground(){
-        this.add.image(config.width / 2, config.height / 2, 'tempBackground');
+        this.add.image(400, 280, 'tempBackground');
     }
 
     //Add the character and set up some variables
     createCharacter(){
-        this.player = this.physics.add.sprite(config.width / 2, config.height / 2, 'gunner');
+        this.player = this.physics.add.sprite(400,280, 'gunner');
         this.faceRight = true;
         this.player.setCollideWorldBounds(true);
     }
@@ -119,11 +123,11 @@ export default class GameScene extends Phaser.Scene {
     }
 
     createEnnemy(){
-        this.ennemy = this.physics.add.sprite(300 ,200,'ennemy');
-        this.faceRight = true;
-        this.ennemy.setCollideWorldBounds(true);
-        this.physics.add.collider(this.ennemy, this.mapLayer);
-        
+    
+            this.ennemy = this.physics.add.sprite(300 ,200,'ennemy');            
+            this.faceRight = true;
+            this.ennemy.setCollideWorldBounds(true);
+            this.physics.add.collider(this.ennemy, this.mapLayer);       
       
     }
 
@@ -185,6 +189,8 @@ export default class GameScene extends Phaser.Scene {
     }
 
     ennemyMovements(){
+
+          
         if (this.player.x - this.ennemy.x > 0)
         {           
            this.ennemy.scaleX = 1;
@@ -195,8 +201,9 @@ export default class GameScene extends Phaser.Scene {
             this.ennemyFaceRight = false;
         }
         this.ennemy.anims.play('idleEnnemy',true);
-        
     }
+    
+    
 
     //Allows the character to shoot with SPACEBAR
     shoot() {
@@ -316,23 +323,11 @@ export default class GameScene extends Phaser.Scene {
 
 
 
-const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 560,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 300 },
-            debug: false
-        }
-    },
-    scene: GameScene
-};
+
 
 //Define all constants
 const fireRate = 10;
 const ennemyFireRate = 3;
 
-const game = new Phaser.Game(config);
+//const game = new Phaser.Game(config);
 
