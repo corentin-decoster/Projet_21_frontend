@@ -25,7 +25,11 @@ var config = {
             gravity: { y: 300 },
             debug: true
         }
-    }
+    },
+    parent: 'sr',
+    dom: {
+        createContainer: true
+    },
 };
 
 var game = new Phaser.Game(config);
