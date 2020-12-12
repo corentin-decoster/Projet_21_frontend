@@ -31,8 +31,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.spritesheet('gunner', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line2.png', { frameWidth: 28, frameHeight: 35 });
         this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
         this.load.image('ennemyBullet', 'assets/TeamGunner/EXTRAS/MuzzleFLash.png');
-       // this.fire =this.add.sprite(0,0,"EnnemyBullet");
-       // this.fire.setScale(0.05);
         this.load.spritesheet('ennemy','assets/TeamGunner/CHARACTER_SPRITES/Red/Gunner_Red_idle.png', { frameWidth: 48, frameHeight: 48 });
 
         //map loading
