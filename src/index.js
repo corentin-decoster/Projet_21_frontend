@@ -16,6 +16,8 @@ class GameScene extends Phaser.Scene {
         this.completedTime;
         this.playedTime;
         this.inGameBoolean;
+        this.lvlOneSpawnPoint;
+        this.nameLvlMap;
     }
 
     preload() {
@@ -26,7 +28,13 @@ class GameScene extends Phaser.Scene {
 
         //map loading
         this.load.image('map_assets','assets/Map/Wasteland.png');
-        this.load.tilemapTiledJSON('map1','assets/Map/map_wasteland_js_ok.json');
+        this.load.tilemapTiledJSON('map1','assets/Map/Map1.json');
+        this.load.tilemapTiledJSON('map2','assets/Map/Map2.json');
+        this.load.tilemapTiledJSON('map3','assets/Map/Map3.json');
+        this.nameLvlMap = new Array();
+        this.nameLvlMap.push('map3');
+        this.nameLvlMap.push('map2');
+        this.nameLvlMap.push('map1');
     }
 
     create() {
@@ -37,11 +45,14 @@ class GameScene extends Phaser.Scene {
 
         
         //Creating the Map and layer + collision between player and layer
+        /*
         this.createLvlOneMap();
         this.createLvlOneTileSet();
         this.createLvlOnePlateform();
-        this.physics.add.collider(this.player, this.mapLayer);
-
+        */
+        this.createALvl();
+        
+        this.createSpawnPointLvl(180,380,400,750,300,500,150,600);
         //Set up Timer
         this.SetUpTimer();
         //Set up a key to stop timer for testing purpose
@@ -50,9 +61,12 @@ class GameScene extends Phaser.Scene {
         //Creating ennemies and their animation + bullet of the ennemy
         this.createEnnemy();
         this.createAnimsEnnemy();
-        this.physics.add.overlap(this.ennemy, this.PlayerBulletGroup, this.enemyHit, null, this);
-        //Creating a bulletGroup which will be the ammunitions available for the character to shoot
         this.PlayerBulletGroup = new BulletGroup(this);
+        this.physics.add.overlap(this.ennemy, this.PlayerBulletGroup, this.enemyHit, null, this);
+        
+        this.physics.add.overlap(this.PlayerBulletGroup, this.mapLayer,this.wallHiy,null,this);
+        //Creating a bulletGroup which will be the ammunitions available for the character to shoot
+       
 
         //Adding a delay on the fire rate
         this.createDelay();
@@ -85,32 +99,50 @@ class GameScene extends Phaser.Scene {
 
     //Add the character and set up some variables
     createCharacter(){
-        this.player = this.physics.add.sprite(config.width / 2, config.height / 2, 'gunner');
+        //this.player = this.physics.add.sprite(config.width / 2, config.height / 2, 'gunner');
+        this.player = this.physics.add.sprite(35, 400, 'gunner');
         this.faceRight = true;
         this.player.setCollideWorldBounds(true);
     }
-
+    createALvl(){
+        this.createLvlOneMap();
+        this.createLvlOneTileSet();
+        this.createLvlOnePlateform();
+    }
     //Add first level
     createLvlOneMap(){
-        this.map=this.make.tilemap({key: 'map1'});
+        this.map=null;
+        this.map=this.make.tilemap({key: this.nameLvlMap.pop()});
     }
     createLvlOneTileSet(){
+        this.tileset=null;
         this.tileset=this.map.addTilesetImage('map_assets_js','map_assets');
     }
     createLvlOnePlateform(){
+        this.mapLayer=null;
         this.mapLayer=this.map.createStaticLayer(0,this.tileset,0,0);
-        this.mapLayer.setCollisionByExclusion([-1])
-        console.log(this.mapLayer);
+        this.mapLayer.setCollisionByExclusion([-1]);
+        this.physics.add.collider(this.player, this.mapLayer);
         
+    }
+    createSpawnPointLvl(y4,x4,y3,x3,y2,x2,y1,x1){
+        this.lvlOneSpawnPoint= new Array();
+        this.lvlOneSpawnPoint.push(y4);
+        this.lvlOneSpawnPoint.push(x4);
+        this.lvlOneSpawnPoint.push(y3);
+        this.lvlOneSpawnPoint.push(x3);
+        this.lvlOneSpawnPoint.push(y2);
+        this.lvlOneSpawnPoint.push(x2);
+        this.lvlOneSpawnPoint.push(y1);
+        this.lvlOneSpawnPoint.push(x1);
     }
 
     createEnnemy(){
-        this.ennemy = this.physics.add.sprite(300 ,200,'ennemy');
+        this.ennemy = this.physics.add.sprite(this.lvlOneSpawnPoint.pop(),
+                                                this.lvlOneSpawnPoint.pop(),'ennemy');
         this.faceRight = true;
         this.ennemy.setCollideWorldBounds(true);
-        this.physics.add.collider(this.ennemy, this.mapLayer);
-        
-      
+        this.physics.add.collider(this.ennemy, this.mapLayer);  
     }
 
     //Add the bulletDelay and set it up
@@ -192,9 +224,29 @@ class GameScene extends Phaser.Scene {
     }
     enemyHit(ennemy,bullet){
         console.log("ennemy hit");
-        ennemy.destroy();
+        if(this.lvlOneSpawnPoint.length<=0){
+            this.switchMap();
+            return;
+        }
+        ennemy.x=this.lvlOneSpawnPoint.pop();
+        ennemy.y=this.lvlOneSpawnPoint.pop();
+        bullet.destroy();   
+    }
+    wallHit(bullet,mapLayer){
         bullet.destroy();
-        
+    }
+
+    switchMap(){
+        this.lvlOneSpawnPoint=new Array();
+        this.createSpawnPointLvl(400,200,300,150,450,40,50,500);
+        if(this.nameLvlMap.length=0){
+            //fin du jeu
+            this.stopAndSaveTimer();
+            return;
+        }
+        this.player.x=35;
+        this.player.y=400;
+        this.createALvl();
     }
 
     //Create all the animations needed for the player
@@ -285,6 +337,8 @@ class GameScene extends Phaser.Scene {
     }
 
     stopAndSaveTimer(){
+        console.log("COUCOUCOCUOCUC");
+        console.log("fdp")
         this.inGameBoolean=false;
         this.completedTime=this.playedTime;
     }
