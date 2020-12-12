@@ -1,11 +1,10 @@
-
-import TitleScene from './titleScene.js';
+import Menu from "./menu.js";
 import Map1 from './map1.js';
 import Map2 from './map2.js';
 import Map3 from './map3.js';
 // Our game scene
 var map1 = new Map1();
-var titleScene = new TitleScene();
+var menu = new Menu();
 var map2 = new Map2();
 var map3 = new Map3();
 
@@ -27,9 +26,9 @@ var config = {
 var game = new Phaser.Game(config);
 console.log(config);
 
-game.scene.add('title',titleScene);
+game.scene.add('menu',menu);
 game.scene.add('map1',map1);
 game.scene.add('map2',map2);
 game.scene.add('map3',map3);
 
-game.scene.start('map1',map1);
+game.scene.start('menu');

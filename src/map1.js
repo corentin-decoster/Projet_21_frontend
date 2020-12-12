@@ -1,6 +1,9 @@
+import thisNumberValue from "es-abstract/2015/thisNumberValue";
 import Bullet from "./bullet.js";
 import BulletGroup from "./bulletGroup.js";
+import EnnemyBulletGroup from "./EnnemyBulletGroup.js"
 const fireRate = 10;
+const ennemyFireRate = 3;
 class Map1 extends Phaser.Scene {
 
 	constructor() {
@@ -12,6 +15,7 @@ class Map1 extends Phaser.Scene {
         this.PlayerBulletGroup;
         this.EnnemyBulletGroup;
         this.bulletDelay;
+        this.ennemyBulletDelay
         this.ennemy;
         this.timerText;
         this.timerTimeEvent;
@@ -31,6 +35,7 @@ class Map1 extends Phaser.Scene {
         this.load.spritesheet('gunner', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line2.png', { frameWidth: 28, frameHeight: 35 });
         this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
         this.load.spritesheet('ennemy','assets/TeamGunner/CHARACTER_SPRITES/Red/Gunner_Red_idle.png', { frameWidth: 48, frameHeight: 48 });
+        this.load.image('ennemyBullet', 'assets/TeamGunner/EXTRAS/MuzzleFLash.png');
 	
 		this.load.image('map_assets','assets/Map/Wasteland.png');
         this.load.tilemapTiledJSON('map1','assets/Map/Map1.json');
@@ -55,6 +60,7 @@ class Map1 extends Phaser.Scene {
 		this.createAnimsEnnemy();
 		//Creating a bulletGroup which will be the ammunitions available for the character to shoot
         this.PlayerBulletGroup = new BulletGroup(this);
+        this.EnnemyBulletGroup = new EnnemyBulletGroup(this);
         this.physics.add.overlap(this.ennemy, this.PlayerBulletGroup, this.enemyHit, null, this);
         
         this.physics.add.overlap(this.PlayerBulletGroup, this.mapLayer,this.wallHiy,null,this);
@@ -78,10 +84,11 @@ class Map1 extends Phaser.Scene {
         this.movements();
         this.ennemyMovements();
         this.shoot();
-     //   this.Ennemyshoot(); 
+        this.Ennemyshoot(); 
 
         //Check the delay for the firerate 
         this.checkingDelay();
+        this.checkingEnnemyDelay();
 	}
 
 	createBackground(){
@@ -135,13 +142,20 @@ class Map1 extends Phaser.Scene {
     //Add the bulletDelay and set it up
     createDelay(){
         this.bulletDelay = fireRate;
+        this.ennemyBulletDelay = ennemyFireRate;
 	}
 	//Check if the bulletDelay is at the fireRate and ++ if not
     checkingDelay(){
         if(this.bulletDelay <= fireRate-1){
             this.bulletDelay++;
         }
-	}
+    }
+    
+    checkingEnnemyDelay(){
+        if(this.ennemyBulletDelay <= ennemyFireRate-1){
+            this.ennemyBulletDelay++;
+        }
+    }
 	//char movement
 	movements(){
         if (this.cursors.right.isDown) {
@@ -198,7 +212,14 @@ class Map1 extends Phaser.Scene {
             this.PlayerBulletGroup.shootBullet(this.player.x, this.player.y, this.faceRight);
             this.bulletDelay = 0;
         }
-	}
+    }
+    
+    Ennemyshoot(){
+        if(this.ennemyBulletDelay == ennemyFireRate){
+            this.EnnemyBulletGroup.shootBullet(this.ennemy.x, this.ennemy.y,this.ennemyFaceRight);
+            this.ennemyBulletDelay = 0;
+        }
+    }    
 	//collide between player
 	enemyHit(ennemy,bullet){
         console.log("ennemy hit");
