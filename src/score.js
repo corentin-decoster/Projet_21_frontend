@@ -16,6 +16,9 @@ class Score extends Phaser.Scene {
     create() {
         this.add.image(370,150,'score');
         this.getHighScore();
+        this.menu = this.add.text(300,480,'RETOUR AU MENU');
+        this.menu.setInteractive({ useHandCursor: true });
+        this.menu.on('pointerdown', () => this.clickButton());
         
 
        
@@ -23,7 +26,7 @@ class Score extends Phaser.Scene {
 
 
    clickButton() {
-       this.scene.start('menu');
+       this.scene.switch('menu');
    }
    
    getHighScore() {

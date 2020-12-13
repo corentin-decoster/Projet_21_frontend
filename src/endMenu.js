@@ -27,7 +27,7 @@ class EndMenu extends Phaser.Scene {
         this.add.image(370,150,'score');
         //this.add.text(400,300,`votre score est de : ${this.playedTime}`);
         
-        this.menu = this.add.text(300,480,'RETOUR AU MENU');
+        this.menu = this.add.text(300,480,'TABLEAU DES SCORES');
         this.menu.setInteractive({ useHandCursor: true });
         this.menu.on('pointerdown', () => this.clickButton());
         var element = this.add.dom(400, 250).createFromCache('form');
