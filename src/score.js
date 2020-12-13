@@ -37,7 +37,7 @@ class Score extends Phaser.Scene {
     var y=280;
     const users= JSON.parse(xhttp.responseText);
     for(let user of users){
-        let name=user.player;
+        let name=user.name;
         console.log(name + " name");
         
         let score=user.score;
