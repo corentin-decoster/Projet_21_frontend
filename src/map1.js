@@ -63,8 +63,11 @@ class Map1 extends Phaser.Scene {
         this.PlayerBulletGroup = new BulletGroup(this);
         this.EnnemyBulletGroup = new EnnemyBulletGroup(this);
         this.physics.add.overlap(this.ennemy, this.PlayerBulletGroup, this.enemyHit, null, this);
-        
-        this.physics.add.overlap(this.PlayerBulletGroup, this.mapLayer,this.wallHiy,null,this);
+        this.physics.add.overlap(this.player,this.EnnemyBulletGroup,this.playerHit,null,this);
+        //this.physics.add.collider(this.EnnemyBulletGroup,this.mapLayer);
+        //this.physics.add.collider(this.PlayerBulletGroup, this.mapLayer);
+        this.physics.add.collider(this.EnnemyBulletGroup,this.mapLayer,this.wallHit,null,this);
+        this.physics.add.collider(this.PlayerBulletGroup, this.mapLayer,this.wallHit,null,this);
         
        
 
@@ -221,6 +224,14 @@ class Map1 extends Phaser.Scene {
             this.ennemyBulletDelay = 0;
         }
     }    
+    playerHit(player,bullet){
+        player.x=35;
+        player.y=400;
+        bullet.setActive(false);
+        bullet.setVisible(false);
+    }
+
+
 	//collide between player
 	enemyHit(ennemy,bullet){
         console.log("ennemy hit");
@@ -234,16 +245,10 @@ class Map1 extends Phaser.Scene {
         bullet.destroy();   
 	}
 	wallHit(bullet,mapLayer){
-        bullet.destroy();
+        bullet.setActive(false);
+        bullet.setVisible(false);
 	}
-	switchMap(){
-        this.lvlOneSpawnPoint=new Array();
-        if(this.nameLvlMap.length=0){
-            //fin du jeu
-            //this.stopAndSaveTimer();
-            return;
-        }
-	}
+
 	//Create all the animations needed for the player
     createAnims(){
         this.anims.create({

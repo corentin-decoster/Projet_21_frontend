@@ -28,6 +28,8 @@ class EndMenu extends Phaser.Scene {
         this.menu.setInteractive({ useHandCursor: true });
         this.menu.on('pointerdown', () => this.clickButton());
         var element = this.add.dom(400, 250).createFromCache('form');
+        var scorePut ="";
+        console.log(scorePut);
         element.addListener('click');
         element.on('click', function (event) {
     
@@ -44,6 +46,7 @@ class EndMenu extends Phaser.Scene {
     
                     //  Hide the login element
                     this.setVisible(false);
+                    scorePut.setText(this.myScore);
                     
                     //  Populate the text with whatever they typed in
                     //postMyScore();
@@ -91,7 +94,9 @@ class EndMenu extends Phaser.Scene {
     }catch(error){
         console.error("error:", error);
     }
+    console.log(scorePut);
    }
+   
   
    
 
