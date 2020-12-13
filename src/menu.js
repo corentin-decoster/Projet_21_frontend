@@ -5,6 +5,7 @@ class Menu extends Phaser.Scene {
         super({key:'menu'});
         this.start;
         this.score;
+        this.music;
     }
     
 
@@ -12,13 +13,14 @@ class Menu extends Phaser.Scene {
         this.load.image('background', './assets/menu_bg.jpg');
         this.load.image('start', './assets/start.png');
         this.load.image('score','./assets/score.png');
-        this.load.audio('gas', 'assets/Music/gas.ogg');
+        this.load.audio('gas', 'assets/Music/gas_long.ogg');
         
 	}
 
 	create() {
-        this.sound.add('gas');
-        this.sound.play('gas',{volume: 0.4});
+       this.music = this.sound.add('gas');
+       this.music.setVolume(0.4);
+       this.music.play();
 		 var bg = this.add.sprite(0,0,'background');
           bg.setOrigin(0,0);
           this.start = this.add.image(370,210,'start');
@@ -30,6 +32,9 @@ class Menu extends Phaser.Scene {
           this.score.setInteractive({useHandCursor: true});
           this.score.on('pointerdown', ()=>this.highscore());
           
+    }
+    update(){
+       
     }
 
 
