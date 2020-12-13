@@ -25,7 +25,7 @@ class Score extends Phaser.Scene {
    clickButton() {
        this.scene.start('menu');
    }
-
+   
    getHighScore() {
     const xhttp = new XMLHttpRequest();
 

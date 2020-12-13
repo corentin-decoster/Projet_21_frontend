@@ -66,18 +66,11 @@ class EndMenu extends Phaser.Scene {
 
        
    }
-   update(){
-       if(!this.gameStop){
-           this.goToScore();
-       }
-   }
-   goToScore(){
-      this.scene.start('score');
-   }
+
 
 
    clickButton() {
-       this.scene.start('menu');
+       this.scene.start('score');
    }
 
    postMyScore(){
