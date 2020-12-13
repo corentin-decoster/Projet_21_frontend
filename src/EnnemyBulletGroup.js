@@ -6,7 +6,7 @@ export default class EnnemyBulletGroup extends Phaser.Physics.Arcade.Group{
         //Create 30 initial bullets
         this.createMultiple({
             classType : EnnemyBullet,
-            frameQuantity : 3,
+            frameQuantity : 10,
             active : false,
             visible : false,            
             key : 'ennemyBullet'

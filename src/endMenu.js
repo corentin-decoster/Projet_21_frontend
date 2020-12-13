@@ -23,11 +23,15 @@ class EndMenu extends Phaser.Scene {
 
 
     create() {
+        
         this.add.image(370,150,'score');
+        //this.add.text(400,300,`votre score est de : ${this.playedTime}`);
+        
         this.menu = this.add.text(300,480,'RETOUR AU MENU');
         this.menu.setInteractive({ useHandCursor: true });
         this.menu.on('pointerdown', () => this.clickButton());
         var element = this.add.dom(400, 250).createFromCache('form');
+        this.add.text(400,280, 'ZYVA TRICHES PAS T AS FAIT : '+this.playedTime + '!!');
         var scorePut ="";
         console.log(scorePut);
         element.addListener('click');
@@ -36,8 +40,6 @@ class EndMenu extends Phaser.Scene {
             if (event.target.name === 'playButton')
             {
                 this.player = this.getChildByName('player');
-                this.myScore= this.getChildByName('score');
-    
                 //  Have they entered anything?
                 if (this.player.value !== '')
                 {
@@ -46,8 +48,6 @@ class EndMenu extends Phaser.Scene {
     
                     //  Hide the login element
                     this.setVisible(false);
-                    scorePut.setText(this.myScore);
-                    
                     //  Populate the text with whatever they typed in
                     //postMyScore();
                     
@@ -94,7 +94,6 @@ class EndMenu extends Phaser.Scene {
     }catch(error){
         console.error("error:", error);
     }
-    console.log(scorePut);
    }
    
   

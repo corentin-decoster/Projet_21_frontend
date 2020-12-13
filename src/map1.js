@@ -3,7 +3,7 @@ import Bullet from "./bullet.js";
 import BulletGroup from "./bulletGroup.js";
 import EnnemyBulletGroup from "./EnnemyBulletGroup.js"
 const fireRate = 10;
-const ennemyFireRate = 3;
+const ennemyFireRate = 60;
 class Map1 extends Phaser.Scene {
 
 	constructor() {
@@ -24,6 +24,8 @@ class Map1 extends Phaser.Scene {
         this.inGameBoolean;
         this.lvlOneSpawnPoint;
         this.nameLvlMap;
+        this.nbrDeath;
+        this.deathCountText;
 	}
 
 	init() {
@@ -34,11 +36,11 @@ class Map1 extends Phaser.Scene {
 		this.load.image('tempBackground', 'assets/Map/Wasteland_Sky.png');
         this.load.spritesheet('gunner', 'assets/TeamGunner/CHARACTER_SPRITES/Black/Gunner_Black_Full_Line2.png', { frameWidth: 28, frameHeight: 35 });
         this.load.image('bullet', 'assets/TeamGunner/EXTRAS/bullet.png');
-        this.load.spritesheet('ennemy','assets/TeamGunner/CHARACTER_SPRITES/Red/Gunner_Red_idle.png', { frameWidth: 48, frameHeight: 48 });
+        this.load.spritesheet('ennemy','assets/TeamGunner/CHARACTER_SPRITES/Red/spritesheet_red.png', { frameWidth: 28, frameHeight: 35 });
         this.load.image('ennemyBullet', 'assets/TeamGunner/EXTRAS/MuzzleFLash.png');
 	
 		this.load.image('map_assets','assets/Map/Wasteland.png');
-        this.load.tilemapTiledJSON('map1','assets/Map/Map1.json');
+        this.load.tilemapTiledJSON('map1','assets/Map/Map2.json');
 	}
 
 	create() {
@@ -48,8 +50,8 @@ class Map1 extends Phaser.Scene {
 	   this.createAnims();
 
 	   this.createALvl();
-        
-        this.createSpawnPointLvl(180,380,400,750,300,500,150,600);
+       this.setUpDeathCount();
+       this.createSpawnPointLvl(180,380,400,750,300,500,160,770);
         //Set up 
         this.playedTime = this.time;
         this.SetUpTimer();
@@ -101,7 +103,7 @@ class Map1 extends Phaser.Scene {
 	//Add the character and set up some variables
     createCharacter(){
         //this.player = this.physics.add.sprite(config.width / 2, config.height / 2, 'gunner');
-        this.player = this.physics.add.sprite(35, 400, 'gunner');
+        this.player = this.physics.add.sprite(35, 450, 'gunner');
         this.faceRight = true;
         this.player.setCollideWorldBounds(true);
     }
@@ -187,27 +189,29 @@ class Map1 extends Phaser.Scene {
             if (this.player.body.blocked.down) 
                 this.player.setVelocityY(-250);
         }
+        
 
         if(!this.player.body.blocked.down){
             if (this.faceRight)
                 this.player.anims.play('jumpRight', true);
             else
                 this.player.anims.play('jumpLeft', true);
+            if(this.cursors.down.isDown)
+                this.player.setVelocityY(800);
         }
 	}
 	//enem movement
 	ennemyMovements(){
-        if (this.player.x - this.ennemy.x > 0)
-        {           
-           this.ennemy.scaleX = 1;
+        if (this.player.x - this.ennemy.x > 0){                     
            this.ennemyFaceRight = true;
+           this.ennemy.anims.play('idleEnnemyRight',true);
             
-        } else {
-            this.ennemy.scaleX = -1;
+        } else {           
             this.ennemyFaceRight = false;
+            this.ennemy.anims.play('idleEnnemyLeft',true);
+
         }
-        this.ennemy.anims.play('idleEnnemy',true);
-        
+
 	}
 	
 	//Allows the character to shoot with SPACEBAR
@@ -225,6 +229,8 @@ class Map1 extends Phaser.Scene {
         }
     }    
     playerHit(player,bullet){
+        this.nbrDeath++;
+        this.deathCountText.setText('Deaths: '+ this.nbrDeath);
         player.x=35;
         player.y=400;
         bullet.setActive(false);
@@ -235,18 +241,21 @@ class Map1 extends Phaser.Scene {
 	//collide between player
 	enemyHit(ennemy,bullet){
         console.log("ennemy hit");
-        if(this.lvlOneSpawnPoint.length<=0){
+        if(this.lvlOneSpawnPoint.length<=8){
             console.log(this.playedTime+"time before switch");
-            this.scene.start('map2', {time:this.playedTime});
+            this.scene.start('endMenu', {time:this.playedTime, death:this.nbrDeath});
             return;
         }
         ennemy.x=this.lvlOneSpawnPoint.pop();
         ennemy.y=this.lvlOneSpawnPoint.pop();
-        bullet.destroy();   
+        bullet.setActive(false);
+        bullet.setVisible(false);   
 	}
 	wallHit(bullet,mapLayer){
         bullet.setActive(false);
         bullet.setVisible(false);
+        bullet.x=0;
+        bullet.y=0;
 	}
 
 	//Create all the animations needed for the player
@@ -291,14 +300,23 @@ class Map1 extends Phaser.Scene {
     createAnimsEnnemy(){
 
         this.anims.create({
-            key: 'idleEnnemy',
+            key: 'idleEnnemyRight',
             frames: this.anims.generateFrameNumbers('ennemy', { start: 0, end: 4 }),
+            frameRate: 10
+        });
+        this.anims.create({
+            key:'idleEnnemyLeft',
+            frames: this.anims.generateFrameNumbers('ennemy', { start: 5, end: 9}),
             frameRate: 10
         });
       
      
     }
 
+    setUpDeathCount(){
+        this.nbrDeath=0;
+        this.deathCountText= this.add.text(700,32, 'Deaths: '+ this.nbrDeath);
+    }
 	  //handling the timer
     SetUpTimer(){
         this.inGameBoolean=true;
@@ -336,8 +354,6 @@ class Map1 extends Phaser.Scene {
     }
 
     stopAndSaveTimer(){
-        console.log("COUCOUCOCUOCUC");
-        console.log("fdp")
         this.inGameBoolean=false;
         this.completedTime=this.playedTime;
     }
