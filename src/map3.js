@@ -55,7 +55,7 @@ class Map3 extends Phaser.Scene {
         //Set up Timer
         this.SetUpTimer();
         //Set up a key to stop timer for testing purpose
-        this.input.keyboard.on('keydown_W', this.stopAndSaveTimer, this);
+        //this.input.keyboard.on('keydown_W', this.stopAndSaveTimer, this);
 
         //Creating ennemies and their animation + bullet of the ennemy
         this.createEnnemy();
